@@ -24,6 +24,7 @@ namespace GameProject_0
         private Vector2 _movingSpriteVelocity;
 
         private SpriteFont _arial;
+        VehicleSprite[] vehicles;
 
         public Game1()
         {
@@ -37,6 +38,13 @@ namespace GameProject_0
             // TODO: Add your initialization logic here
             _movingSpritePosition = new Vector2((_graphics.GraphicsDevice.Viewport.Width - 16) / 2, (_graphics.GraphicsDevice.Viewport.Height - 16) / 2);
 
+            vehicles = new VehicleSprite[]
+            {
+                new VehicleSprite(){ Position = new Vector2(50, 100), Direction = Direction.Right },
+                new VehicleSprite(){ Position = new Vector2(100, 150), Direction = Direction.Down },
+                new VehicleSprite(){ Position = new Vector2(75, 300), Direction = Direction.Up },
+            };
+
             base.Initialize();
         }
 
@@ -45,6 +53,7 @@ namespace GameProject_0
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            foreach (var vehicle in vehicles) vehicle.LoadContent(Content);
             atlas = Content.Load<Texture2D>("colored_packed");
             _arial = Content.Load<SpriteFont>("arial");
         }
@@ -55,6 +64,7 @@ namespace GameProject_0
                 Exit();
 
             // TODO: Add your update logic here
+            foreach (var vehicle in vehicles) vehicle.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -78,6 +88,8 @@ namespace GameProject_0
             
             _spriteBatch.Draw(atlas, _movingSpritePosition, new Rectangle(400, 112, 16, 16), Color.Purple,
                 0, Vector2.Zero, new Vector2(2.0f, 2.0f), SpriteEffects.None, 0.0f);
+
+            foreach (var vehicle in vehicles) vehicle.Draw(gameTime, _spriteBatch);
 
             _spriteBatch.End();
 
