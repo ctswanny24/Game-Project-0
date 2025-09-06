@@ -19,7 +19,6 @@ namespace GameProject_0
 
     public class VehicleSprite
     {
-        private Random random;
 
         private Texture2D texture;
 
@@ -27,12 +26,11 @@ namespace GameProject_0
 
         public Direction Direction;
 
-        public Vector2 Position;
+        public Vector2 restartLocation;
 
-        public VehicleSprite()
-        {
-            random = new System.Random();
-        }
+        public Vector2 Position;
+        
+        public float ScreenWidth;
 
         /// <summary>
         /// Loads the bat sprite texture
@@ -40,7 +38,7 @@ namespace GameProject_0
         /// <param name="content">The content manager to load</param>
         public void LoadContent(ContentManager content)
         {
-            texture = content.Load<Texture2D>("colored_packed");
+            texture = content.Load<Texture2D>("Car");
         }
 
         /// <summary>
@@ -52,39 +50,24 @@ namespace GameProject_0
             //Update the direction timer
             directionTimer += gameTime.ElapsedGameTime.TotalSeconds;
 
-            if(directionTimer > 3.5)
+            if(Position.X > ScreenWidth)
             {
-                switch (Direction)
-                {
-                    case Direction.Up:
-                        Direction = Direction.Right;
-                        break;
-                    case Direction.Right:
-                        Direction = Direction.Down;
-                        break;
-                    case Direction.Down:
-                        Direction = Direction.Left;
-                        break;
-                    case Direction.Left:
-                        Direction = Direction.Up;
-                        break;
-                }
-                directionTimer -= 3.5;
+                Position = restartLocation;
             }
 
             switch (Direction)
             {
                 case Direction.Up:
-                    Position += new Vector2(0, -1) * random.NextInt64(100, 600) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    Position += new Vector2(0, -1) * 200 * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     break;
                 case Direction.Down:
-                    Position += new Vector2(0, 1) * random.NextInt64(100, 600) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    Position += new Vector2(0, 1) * 200 * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     break;
                 case Direction.Left:
-                    Position += new Vector2(-1, 0) * random.NextInt64(100, 600) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    Position += new Vector2(-1, 0) * 200 * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     break;
                 case Direction.Right:
-                    Position += new Vector2(1, 0) * random.NextInt64(100, 600) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    Position += new Vector2(1, 0) * 200 * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     break;
             }
         }
@@ -96,15 +79,8 @@ namespace GameProject_0
         /// <param name="spriteBatch"> The SpriteBatch to draw with </param>
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            //Using a truck sprite if the random number is odd
-            if(random.NextInt64() % 2 == 1)
-            {
-                spriteBatch.Draw(texture, Position, new Rectangle(192, 320, 32, 16), Color.Purple);
-            }
-            else
-            {
-                spriteBatch.Draw(texture, Position, new Rectangle(224, 336, 16, 16), Color.Crimson);
-            }
+            //Using a car sprite if the random number is odd
+                spriteBatch.Draw(texture, Position, Color.Purple);
         }
     }
 }
